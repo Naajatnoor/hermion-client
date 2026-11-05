@@ -13,9 +13,32 @@ import {
 import { Input } from "../../../components/ui/input"
 import { Label } from "../../../components/ui/label"
 import Link from "next/link"
-import { authClient } from "@/lib/auth-client"
+import { authClient } from "../../../lib/auth-client"
+import { redirect } from "next/navigation";
 
 export default function LoginPage() {
+
+  const handleEmailLogin = async (e: React.SubmitEvent<HTMLElement>) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+    const user = Object.fromEntries(formData.entries()) as {
+      email: string;
+      password: string;
+    };
+
+    const { data, error } = await authClient.signIn.email({
+      ...user,
+    });
+
+    if (data) {
+      redirect("/");
+    }
+
+    if (error) {
+      console.log(error);
+    }
+  };
 
       const handleGoogleSignIn = async ()=>{
             const resData = await authClient.signIn.social({
@@ -51,17 +74,6 @@ export default function LoginPage() {
           <form className="space-y-5">
 
             <div className="grid gap-2">
-              <Label htmlFor="name">Full Name</Label>
-
-              <Input
-                id="name"
-                type="text"
-                placeholder="Enter your full name"
-                required
-              />
-            </div>
-
-            <div className="grid gap-2">
               <Label htmlFor="email">Email Address</Label>
 
               <Input
@@ -72,7 +84,25 @@ export default function LoginPage() {
               />
             </div>
 
-            <Button type="submit" className="w-full bg-[#174C3C]">
+              {/* Password */}
+                        <div className="grid gap-2">
+                          <Label htmlFor="password">Password</Label>
+                          <Input
+                            id="password"
+                            name="password"
+                            type="password"
+                            placeholder="Create a password"
+                            minLength={6}
+                            required
+                          />
+            
+                          <p className="text-xs text-muted-foreground">
+                            Must contain at least 6 characters, one uppercase, one lowercase letter and one special character.
+                          </p>
+                        </div>
+            
+
+            <Button  onSubmit={handleEmailLogin} type="submit" className="w-full bg-[#174C3C]">
              Login
             </Button>
 

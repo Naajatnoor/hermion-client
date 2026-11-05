@@ -21,10 +21,11 @@ import { Card, CardContent } from "../../components/ui/card";
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
 import { Textarea } from "../../components/ui/textarea";
+import { getTokenFromClient } from "../../lib/getTokenFromClient";
 
-// --------------------
+
 // API Configuration
-// --------------------
+
 
 const API_URL = (
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
@@ -32,9 +33,9 @@ const API_URL = (
 
 const EVENT_ENDPOINT = `${API_URL}/add-event`;
 
-// --------------------
+
 // Event Categories
-// --------------------
+
 
 const categories = [
   "Donation",
@@ -46,9 +47,7 @@ const categories = [
   "Education",
 ];
 
-// --------------------
 // Image Presets
-// --------------------
 
 const photoPresets = [
   {
@@ -69,9 +68,7 @@ const photoPresets = [
   },
 ];
 
-// --------------------
 // Event Type
-// --------------------
 
 interface EventPayload {
   title: string;
@@ -83,9 +80,7 @@ interface EventPayload {
   creatorEmail: string;
 }
 
-// --------------------
 // Get Today's Date
-// --------------------
 
 const getTodayDate = () => {
   return new Intl.DateTimeFormat("en-CA", {
@@ -96,9 +91,7 @@ const getTodayDate = () => {
   }).format(new Date());
 };
 
-// --------------------
 // Create Event Page
-// --------------------
 
 export default function CreateEventPage() {
   // Better Auth Session (No JWT)
@@ -116,10 +109,8 @@ export default function CreateEventPage() {
   // Today's Date
   const minDate = getTodayDate();
 
-  // --------------------
-  // Form Submit Handler
-  // --------------------
-
+    // Form Submit Handler
+  
   const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement>
   ) => {
@@ -184,10 +175,12 @@ export default function CreateEventPage() {
 
     try {
       // Send data without 
+         const token = await getTokenFromClient()
       const response = await fetch(EVENT_ENDPOINT,{
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+           authorization: `Bearer ${token}`
         },
         body: JSON.stringify(eventData),
       });
@@ -234,10 +227,8 @@ export default function CreateEventPage() {
     }
   };
 
-  // --------------------
-  // JSX
-  // --------------------
-
+    // JSX
+  
   return (
     <div className="min-h-screen bg-slate-50 px-4 py-8 dark:bg-zinc-950">
       <div className="mx-auto max-w-3xl">
@@ -526,7 +517,7 @@ export default function CreateEventPage() {
                 ) : (
                   <>
                     <Sparkles className="mr-2" size={18} />
-                    Create Community Event
+               Create Community Event
                   </>
                 )}
               </Button>
