@@ -214,59 +214,61 @@ const Banner = () => {
 
 </div>
     
-          <div className="mx-auto grid w-full max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="flex gap-4  justify-center items-center">
 
-  {statistics.map((stat) => {
-    const Icon = stat.icon;
+            {statistics.map((stat, index) => {
+              const Icon = stat.icon;
 
-    return (
-      <div
-        key={stat.label}
-        className="group relative flex min-w-0 items-center gap-3 overflow-hidden rounded-2xl border border-[#174C3C]/10 bg-white/80 p-4 shadow-sm transition-all duration-300 ease-out hover:-translate-y-1 hover:border-[#174C3C]/20 hover:bg-white hover:shadow-lg sm:gap-4 sm:p-5"
-      >
+              return (
+                <div
+                  key={stat.label}
+                  className="group relative flex items-center gap-4 overflow-hidden rounded-2xl border border-[#174C3C]/10 bg-white/80 p-4 shadow-sm transition-all duration-300 ease-out hover:-translate-y-1 hover:border-[#174C3C]/20 hover:bg-white hover:shadow-lg sm:p-5"
+                >
 
-        {/* Icon */}
-        <div
-          className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl sm:h-12 sm:w-12 ${stat.bg} transition-transform duration-300 group-hover:scale-110 group-hover:rotate-[-8deg]`}
-        >
-          <Icon size={21} style={{ color: stat.color }} />
-        </div>
+              
+                  <div
+                    className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${stat.bg} transition-transform duration-300 group-hover:scale-110 group-hover:rotate-[-8deg]`}
+                  >
+                    <Icon
+                      size={22}
+                      style={{ color: stat.color }}
+                    />
+                  </div>
 
-        {/* Information */}
-        <div className="relative z-10 min-w-0">
-          <h3
-            className="text-xl font-extrabold tracking-tight sm:text-2xl"
-            style={{ color: stat.color }}
-          >
-            {stat.value}
-          </h3>
+            
+                  <div className="relative z-10 min-w-0">
+                    <h3
+                      className="text-2xl font-extrabold tracking-tight"
+                      style={{ color: stat.color }}
+                    >
+                      {stat.value}
+                    </h3>
 
-          <p className="mt-0.5 text-sm font-semibold text-[#26352E]">
-            {stat.label}
-          </p>
+                    <p className="mt-0.5 text-sm font-semibold text-[#26352E]">
+                      {stat.label}
+                    </p>
 
-          <p className="mt-1 break-words text-xs leading-5 text-[#89938B]">
-            {stat.description}
-          </p>
-        </div>
+                    <p className="mt-1 text-xs text-[#89938B]">
+                      {stat.description}
+                    </p>
+                  </div>
 
-        {/* Decorative Circle */}
-        <div
-          className="absolute -right-5 -top-5 h-16 w-16 rounded-full opacity-[0.06] transition-transform duration-500 group-hover:scale-150"
-          style={{ backgroundColor: stat.color }}
-        />
+                  {/* Decorative Circle */}
+                  <div
+                    className="absolute -right-5 -top-5 h-16 w-16 rounded-full opacity-[0.06] transition-transform duration-500 group-hover:scale-150"
+                    style={{ backgroundColor: stat.color }}
+                  />
 
-        {/* Bottom Accent */}
-        <div
-          className="absolute bottom-0 left-0 h-[3px] w-0 rounded-r-full transition-all duration-500 group-hover:w-full"
-          style={{ backgroundColor: stat.color }}
-        />
+                  {/* Bottom Accent */}
+                  <div className="absolute bottom-0 left-0 h-[3px] w-0 rounded-r-full transition-all duration-500 group-hover:w-full"
+                    style={{ backgroundColor: stat.color }}
+                  />
 
-      </div>
-    );
-  })}
+                </div>
+              );
+            })}
 
-</div>
+          </div>
         </section>
 
       </div>

@@ -1,12 +1,16 @@
 import Features from "../components/homepage/Platformfeatures";
 import Banner from "../components/homepage/Banner";
+import Newsletter from "../components/homepage/SubscriptionSection";
+import UpcomingEvents from "../components/events/UpcomingEvents";
 
 const page = () => {
   return (
     <div>
     <Banner/>
     <Features/>
-    <h1> recent upcoming event </h1>
+   <UpcomingEvents  limit={6}/>
+    <h1>past evets</h1>
+    <Newsletter/>
 
     </div>
   );
