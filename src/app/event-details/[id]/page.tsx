@@ -1,24 +1,3 @@
-// import React from 'react';
-
-
-//   const EventDetailsPage = async ({params})=>{
-//   const{id} = await params;
-//   const res = await fetch(`http://localhost:8000/createEvent/${id}`)
-//   const events = await res.json();
-
-//   return (
-//     <div>
-//       details page
-//       <div>
-//        <h1>Title:{events.title}</h1>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default EventDetailsPage;
-
-
 
 import Link from "next/link";
 import Image from "next/image";
@@ -27,7 +6,6 @@ import {
   ArrowUpRight,
   CalendarDays,
   MapPin,
-  Clock3,
   Heart,
   Users,
   ShieldCheck,
@@ -36,6 +14,8 @@ import {
   HandHeart,
   ChevronRight,
 } from "lucide-react";
+
+import JoinEvent from "../../../components/events/JoinEvent";
 
 interface EventData {
   _id: string;
@@ -68,7 +48,7 @@ async function getEvent(id: string): Promise<EventData | null> {
         : null
     ) || null;
   } catch (error) {
-    console.error(error);
+    console.error("Failed to fetch event:", error);
     return null;
   }
 }
@@ -76,7 +56,9 @@ async function getEvent(id: string): Promise<EventData | null> {
 function formatDate(date: string) {
   const parsed = new Date(date);
 
-  if (Number.isNaN(parsed.getTime())) return "Date unavailable";
+  if (Number.isNaN(parsed.getTime())) {
+    return "Date unavailable";
+  }
 
   return parsed.toLocaleDateString("en-US", {
     day: "2-digit",
@@ -88,7 +70,9 @@ function formatDate(date: string) {
 function formatDay(date: string) {
   const parsed = new Date(date);
 
-  if (Number.isNaN(parsed.getTime())) return "--";
+  if (Number.isNaN(parsed.getTime())) {
+    return "--";
+  }
 
   return parsed.toLocaleDateString("en-US", {
     weekday: "short",
@@ -110,9 +94,11 @@ export default async function EventDetailsPage({
           <h1 className="text-3xl font-bold text-[#183c32]">
             Event Not Found
           </h1>
+
           <p className="mt-3 text-gray-500">
             This event may have been removed.
           </p>
+
           <Link
             href="/upcoming-events"
             className="mt-6 inline-flex rounded-full bg-[#176b52] px-6 py-3 text-white"
@@ -144,12 +130,12 @@ export default async function EventDetailsPage({
         </div>
       </div>
 
-      <div className="mx-auto max-w-7xl px-5 py-3  sm:px-8 lg:py-3">
+      <div className="mx-auto max-w-7xl px-5 py-3 sm:px-8 lg:py-3">
 
         {/* Intro */}
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
           <div>
-            <p className="sm:text-[5px] lg:text-xs font-bold uppercase tracking-[0.25em] text-[#a18b5d] ">
+            <p className="text-xs font-bold uppercase tracking-[0.25em] text-[#a18b5d]">
               Discover · Participate · Make a difference
             </p>
 
@@ -170,7 +156,7 @@ export default async function EventDetailsPage({
         {/* Hero Section */}
         <section className="grid items-stretch gap-5 lg:grid-cols-12">
 
-          {/* Image */}
+          {/* Event Image */}
           <div className="relative min-h-[320px] overflow-hidden rounded-[28px] bg-[#dce6df] lg:col-span-8 lg:min-h-[510px]">
             {event.thumbnail && (
               <Image
@@ -212,12 +198,12 @@ export default async function EventDetailsPage({
 
           {/* Event Summary */}
           <div className="flex flex-col justify-between rounded-[28px] bg-[#193e33] p-7 text-white sm:p-9 lg:col-span-4">
-
             <div>
               <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#b6d0c2]">
                   The Initiative
                 </span>
+
                 <HandHeart className="text-[#c8d9b6]" size={25} />
               </div>
 
@@ -239,7 +225,9 @@ export default async function EventDetailsPage({
                 </div>
 
                 <div>
-                  <p className="text-xs text-[#b6d0c2]">Event date</p>
+                  <p className="text-xs text-[#b6d0c2]">
+                    Event date
+                  </p>
                   <p className="mt-1 font-semibold">
                     {formatDate(event.eventDate)}
                   </p>
@@ -252,7 +240,9 @@ export default async function EventDetailsPage({
                 </div>
 
                 <div>
-                  <p className="text-xs text-[#b6d0c2]">Location</p>
+                  <p className="text-xs text-[#b6d0c2]">
+                    Location
+                  </p>
                   <p className="mt-1 font-semibold">
                     {event.location}
                   </p>
@@ -264,6 +254,7 @@ export default async function EventDetailsPage({
               <p className="text-xs font-semibold uppercase tracking-wider">
                 Together we can
               </p>
+
               <p className="mt-2 text-lg font-bold">
                 Make the community stronger.
               </p>
@@ -271,19 +262,31 @@ export default async function EventDetailsPage({
           </div>
         </section>
 
+        {/* Join Event & Volunteers Section */}
+        <section className="mt-8">
+          <JoinEvent
+            event={{
+              _id: event._id,
+              title: event.title,
+              eventDate: event.eventDate,
+            }}
+          />
+        </section>
+
         {/* Main Details */}
         <section className="mt-12 grid gap-8 lg:grid-cols-12">
 
           {/* About Event */}
           <div className="lg:col-span-8">
-
             <div className="rounded-[28px] border border-[#19382f]/10 bg-white p-7 sm:p-10">
               <div className="flex items-center gap-3">
                 <div className="h-10 w-1 rounded-full bg-[#a18b5d]" />
+
                 <div>
                   <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#a18b5d]">
                     Get to know the event
                   </p>
+
                   <h3 className="mt-1 text-2xl font-bold">
                     About This Initiative
                   </h3>
@@ -304,9 +307,11 @@ export default async function EventDetailsPage({
 
                 <div className="rounded-2xl bg-[#f5f8f5] p-5">
                   <CalendarDays className="text-[#39836b]" size={23} />
+
                   <p className="mt-4 text-xs text-[#84948c]">
                     Date
                   </p>
+
                   <p className="mt-1 font-semibold">
                     {formatDate(event.eventDate)}
                   </p>
@@ -314,9 +319,11 @@ export default async function EventDetailsPage({
 
                 <div className="rounded-2xl bg-[#f5f8f5] p-5">
                   <MapPin className="text-[#39836b]" size={23} />
+
                   <p className="mt-4 text-xs text-[#84948c]">
                     Venue
                   </p>
+
                   <p className="mt-1 font-semibold">
                     {event.location}
                   </p>
@@ -324,9 +331,11 @@ export default async function EventDetailsPage({
 
                 <div className="rounded-2xl bg-[#f5f8f5] p-5">
                   <HandHeart className="text-[#39836b]" size={23} />
+
                   <p className="mt-4 text-xs text-[#84948c]">
                     Event Type
                   </p>
+
                   <p className="mt-1 font-semibold">
                     {event.eventType}
                   </p>
@@ -334,9 +343,11 @@ export default async function EventDetailsPage({
 
                 <div className="rounded-2xl bg-[#f5f8f5] p-5">
                   <Users className="text-[#39836b]" size={23} />
+
                   <p className="mt-4 text-xs text-[#84948c]">
                     Organized By
                   </p>
+
                   <p className="mt-1 break-all font-semibold">
                     {event.creatorEmail}
                   </p>
@@ -356,6 +367,7 @@ export default async function EventDetailsPage({
                   <h3 className="text-lg font-bold">
                     Before You Participate
                   </h3>
+
                   <p className="mt-3 text-sm leading-7 text-[#71827b]">
                     Please review the event date, venue and
                     description carefully. For participation
@@ -371,13 +383,13 @@ export default async function EventDetailsPage({
           <aside className="lg:col-span-4">
             <div className="sticky top-8 space-y-5">
 
-              {/* Join Card */}
+              {/* Contact Organizer Card */}
               <div className="rounded-[28px] border border-[#19382f]/10 bg-white p-7 shadow-[0_15px_50px_rgba(25,56,47,0.05)] sm:p-8">
-
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold uppercase tracking-[0.18em] text-[#a18b5d]">
                     Get Involved
                   </span>
+
                   <Heart size={21} className="text-[#39836b]" />
                 </div>
 
@@ -396,7 +408,6 @@ export default async function EventDetailsPage({
                 >
                   <Heart size={17} />
                   Contact Organizer
-                  <ArrowUpRight size={17} />
                 </Link>
 
                 <p className="mt-4 text-center text-xs text-[#9aa9a1]">
@@ -414,6 +425,7 @@ export default async function EventDetailsPage({
                     <p className="text-xs text-[#9aa9a1]">
                       Organizer Email
                     </p>
+
                     <p className="mt-1 break-all text-sm font-semibold">
                       {event.creatorEmail}
                     </p>
@@ -427,6 +439,7 @@ export default async function EventDetailsPage({
                   <span className="text-xs font-bold uppercase text-[#a18b5d]">
                     {formatDay(event.eventDate)}
                   </span>
+
                   <span className="text-3xl font-bold text-[#193e33]">
                     {new Date(event.eventDate).getDate() || "--"}
                   </span>
@@ -436,6 +449,7 @@ export default async function EventDetailsPage({
                   <p className="text-xs text-[#84948c]">
                     Mark your calendar
                   </p>
+
                   <p className="mt-1 font-bold">
                     Don't miss this opportunity.
                   </p>
@@ -447,26 +461,27 @@ export default async function EventDetailsPage({
         </section>
 
         {/* Bottom CTA */}
-        <section className="mt-12 overflow-hidden rounded-[28px] bg-[#193e33] px-7 py-12 text-center text-white sm:px-12 sm:py-16">
-          <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#b6d0c2]">
+        <section className="mt-12 overflow-hidden rounded-[28px] bg-[#e8eee8] px-7 py-12 text-center text-white sm:px-12 sm:py-16">
+          {/* <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#b6d0c2]">
             Hermione Community
-          </span>
+          </span> */}
 
-          <h2 className="mx-auto mt-5 max-w-2xl text-3xl font-bold sm:text-4xl">
+          {/* <h2 className="mx-auto mt-5 max-w-2xl text-3xl font-bold sm:text-4xl">
             Small contributions.
-            <span className="block font-serif font-normal italic text-[#c8d9b6]">
+
+            <span className="block font-serif font-normal italic text-[#]">
               Meaningful changes.
             </span>
-          </h2>
+          </h2> */}
 
-          <p className="mx-auto mt-5 max-w-lg text-sm leading-7 text-[#c0d2c9]">
+          <p className="mx-auto mt-5 max-w-lg text-sm leading-7 text-[#193e33]">
             Explore more community initiatives and find
             opportunities to make a difference.
           </p>
 
           <Link
             href="/upcoming-events"
-            className="mt-8 inline-flex items-center gap-3 rounded-full bg-[#d3e2c9] px-7 py-3.5 text-sm font-bold text-[#193e33] transition hover:bg-white"
+            className="mt-8 inline-flex items-center gap-3 rounded-full bg-[#193e33] px-7 py-3.5 text-sm font-bold text-[#c8d9b6] transition hover:bg-green-800"
           >
             Explore All Events
             <ChevronRight size={18} />
@@ -475,14 +490,7 @@ export default async function EventDetailsPage({
 
       </div>
 
-      {/* Footer */}
-      <footer className="border-t border-[#19382f]/10 py-8">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-5 text-xs text-[#84948c] sm:flex-row sm:px-8">
-          <p>© {new Date().getFullYear()} Hermione. All rights reserved.</p>
-          <p>Building stronger communities together.</p>
-        </div>
-      </footer>
+     
     </main>
   );
 }
-
