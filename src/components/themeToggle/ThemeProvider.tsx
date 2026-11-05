@@ -1,19 +1,18 @@
-
 "use client";
 
+import * as React from "react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 
-export function ThemeProvider({
-  children,
-}: {
+interface ThemeProviderProps {
   children: React.ReactNode;
-}) {
+}
+
+export function ThemeProvider({ children }: ThemeProviderProps) {
   return (
     <NextThemesProvider
       attribute="class"
-      defaultTheme="light"
-      enableSystem={false}
-      storageKey="hermione-theme"
+      defaultTheme="system"
+      enableSystem
       disableTransitionOnChange
     >
       {children}
