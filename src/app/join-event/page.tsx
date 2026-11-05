@@ -1,9 +1,10 @@
+import JoinedEvents from '../../components/events/JoinedEvents';
 import React from 'react';
 
 const page = () => {
     return (
         <div>
-            join evvent
+        <JoinedEvents/>
         </div>
     );
 };
